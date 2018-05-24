@@ -13,7 +13,7 @@ node(env.NODE) {
                 dnf install -y git rsync openssh-clients dnf-plugins-core fedpkg dnf-utils awscli
                 cp RPM-GPG-* /etc/pki/rpm-gpg/
                 dnf copr -y enable walters/buildtools-fedora
-                dnf install -y rpmdistro-gitoverlay
+                dnf install -y rpmdistro-gitoverlay go-srpm-macros
             """
         }
 
