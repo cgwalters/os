@@ -54,25 +54,25 @@ node(env.NODE) {
             return
         }
 
-        stage("Sync Out") {
-            withCredentials([sshUserPrivateKey(credentialsId: env['ARTIFACT_SSH_CREDS_ID'],
-                                               keyFileVariable: 'KEY_FILE')]) {
-                sh """
-                    rsync -Hrlpt --stats --delete --delete-after \
-                        -e 'ssh -i ${env.KEY_FILE} \
-                                -o UserKnownHostsFile=/dev/null \
-                                -o StrictHostKeyChecking=no' \
-                        ${rdgo}/ ${env.ARTIFACT_SERVER}:${rdgo}
-                """
-            }
-            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
-                              credentialsId: env['AWS_CREDENTIALS']]]) {
-                sh """
-                    aws s3 sync --delete ${rdgo}/build/ s3://aos-ci/rhcos/rdgo
-                """
-            }
-            currentBuild.description = 'rdgo build+sync done'
-        }
+        // stage("Sync Out") {
+        //     withCredentials([sshUserPrivateKey(credentialsId: env['ARTIFACT_SSH_CREDS_ID'],
+        //                                        keyFileVariable: 'KEY_FILE')]) {
+        //         sh """
+        //             rsync -Hrlpt --stats --delete --delete-after \
+        //                 -e 'ssh -i ${env.KEY_FILE} \
+        //                         -o UserKnownHostsFile=/dev/null \
+        //                         -o StrictHostKeyChecking=no' \
+        //                 ${rdgo}/ ${env.ARTIFACT_SERVER}:${rdgo}
+        //         """
+        //     }
+        //     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',
+        //                       credentialsId: env['AWS_CREDENTIALS']]]) {
+        //         sh """
+        //             aws s3 sync --delete ${rdgo}/build/ s3://aos-ci/rhcos/rdgo
+        //         """
+        //     }
+        //     currentBuild.description = 'rdgo build+sync done'
+        // }
     }
 
     } finally {
